@@ -68,10 +68,7 @@ function HomePage({ onEnter }: { onEnter: () => void }) {
 
       {/* 读报按钮 */}
       <button
-        onClick={() => {
-          console.log("按钮点击事件触发");
-          onEnter();
-        }}
+        onClick={onEnter}
         className="px-12 py-4 border-2 border-white text-white text-xl font-serif transition-all duration-300 cursor-pointer hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/50"
       >
         读报
@@ -235,15 +232,8 @@ export default function Home() {
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   const handleEnter = () => {
-    console.log("读报按钮被点击");
-    // 先显示云雾特效
-    setShowCloud(true);
-    setTimeout(() => {
-      // 1秒后切换到报纸页面并隐藏云雾特效
-      console.log("切换到报纸页面");
-      setPage("newspaper");
-      setShowCloud(false);
-    }, 1000);
+    console.log("切换到报纸页面");
+    setPage("newspaper");
   };
 
   const handleHotspotClick = (name: string) => {
