@@ -69,7 +69,7 @@ function HomePage({ onEnter }: { onEnter: () => void }) {
       {/* 读报按钮 */}
       <button
         onClick={onEnter}
-        className="px-12 py-4 border-2 border-white text-white text-xl font-serif hover:bg-white hover:text-black transition-colors duration-300"
+        className="px-12 py-4 border-2 border-white text-white text-xl font-serif transition-all duration-300 cursor-pointer hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/50"
       >
         读报
       </button>
@@ -102,7 +102,7 @@ function ContentModal({ title, onClose }: { title: string; onClose: () => void }
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-2xl transition-colors"
+            className="text-gray-400 hover:text-white text-2xl transition-all duration-300 cursor-pointer hover:scale-110"
           >
             ×
           </button>
@@ -143,7 +143,7 @@ function YouthColumnPage({ onClose }: { onClose: () => void }) {
       {/* 返回按钮 */}
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 text-amber-200 hover:text-white text-3xl transition-colors z-10"
+        className="absolute top-6 right-6 text-amber-200 hover:text-white text-3xl transition-all duration-300 cursor-pointer z-10 hover:scale-110"
       >
         ×
       </button>
@@ -153,7 +153,7 @@ function YouthColumnPage({ onClose }: { onClose: () => void }) {
         {["选项 A", "选项 B", "选项 C"].map((text, i) => (
           <button
             key={i}
-            className="px-8 py-4 bg-amber-100/90 text-amber-900 border-2 border-amber-800 font-serif text-lg shadow-lg"
+            className="px-8 py-4 bg-amber-100/90 text-amber-900 border-2 border-amber-800 font-serif text-lg shadow-lg transition-all duration-300 cursor-pointer hover:bg-amber-200 hover:shadow-xl hover:scale-105"
           >
             {text}
           </button>
@@ -164,7 +164,7 @@ function YouthColumnPage({ onClose }: { onClose: () => void }) {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-3xl px-4">
         <div
           onClick={() => setDialogIndex(prev => (prev + 1) % dialogs.length)}
-          className="bg-amber-100/95 p-8 cursor-pointer border-4 border-amber-800 shadow-2xl"
+          className="bg-amber-100/95 p-8 cursor-pointer border-4 border-amber-800 shadow-2xl transition-all duration-300 hover:shadow-3xl hover:scale-[1.02]"
         >
           <p className="text-amber-900 font-serif text-xl leading-relaxed">
             {dialogs[dialogIndex]}
@@ -197,7 +197,7 @@ function NewspaperPage({ onHotspotClick, onFlip }: { onHotspotClick: (name: stri
             <button
               key={i}
               onClick={() => onHotspotClick(hotspot.name)}
-              className="absolute bg-white/30 hover:bg-white/50 rounded cursor-pointer flex items-center justify-center transition-all duration-300 hover:scale-105"
+              className="absolute bg-white/30 hover:bg-white/50 rounded cursor-pointer flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-white/40 border-2 border-transparent hover:border-white"
               style={{
                 left: `${hotspot.x}%`,
                 top: `${hotspot.y}%`,
@@ -205,7 +205,7 @@ function NewspaperPage({ onHotspotClick, onFlip }: { onHotspotClick: (name: stri
                 height: `${hotspot.height}%`
               }}
             >
-              <span className="text-gray-800 font-serif text-lg">
+              <span className="text-gray-800 font-serif text-lg transition-all duration-300">
                 {hotspot.name}
               </span>
             </button>
@@ -216,7 +216,7 @@ function NewspaperPage({ onHotspotClick, onFlip }: { onHotspotClick: (name: stri
       {/* 翻页按钮 */}
       <button
         onClick={onFlip}
-        className="absolute bottom-8 right-8 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-serif text-lg transition-colors z-10"
+        className="absolute bottom-8 right-8 px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-serif text-lg transition-all duration-300 cursor-pointer z-10 hover:shadow-lg hover:shadow-white/30"
       >
         翻页
       </button>
