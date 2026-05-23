@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
 // 热区配置
 interface Hotspot {
@@ -233,10 +232,11 @@ export default function Home() {
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   const handleEnter = () => {
-    // 先切换页面，再显示云雾特效
-    setPage("newspaper");
+    // 先显示云雾特效
     setShowCloud(true);
     setTimeout(() => {
+      // 1秒后切换到报纸页面并隐藏云雾特效
+      setPage("newspaper");
       setShowCloud(false);
     }, 1000);
   };
@@ -244,9 +244,11 @@ export default function Home() {
   const handleHotspotClick = (name: string) => {
     setModalTitle(name);
     if (name === "青年专栏") {
-      setPage("youth");
+      // 先显示云雾特效
       setShowCloud(true);
       setTimeout(() => {
+        // 1秒后切换到青年专栏页面并隐藏云雾特效
+        setPage("youth");
         setShowCloud(false);
       }, 1000);
     } else {
