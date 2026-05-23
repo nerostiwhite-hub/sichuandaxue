@@ -233,20 +233,21 @@ export default function Home() {
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   const handleEnter = () => {
+    // 先切换页面，再显示云雾特效
+    setPage("newspaper");
     setShowCloud(true);
     setTimeout(() => {
       setShowCloud(false);
-      setPage("newspaper");
     }, 1000);
   };
 
   const handleHotspotClick = (name: string) => {
     setModalTitle(name);
     if (name === "青年专栏") {
+      setPage("youth");
       setShowCloud(true);
       setTimeout(() => {
         setShowCloud(false);
-        setPage("youth");
       }, 1000);
     } else {
       setShowModal(true);
