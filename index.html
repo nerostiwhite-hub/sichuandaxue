@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>思传达学</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SimSun', 'STSong', 'Songti SC', serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cloudEffect {
+            0% {
+                opacity: 0;
+                filter: blur(0px);
+            }
+            50% {
+                opacity: 0.8;
+                filter: blur(20px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(40px);
+            }
+        }
+
+        @keyframes crossfadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes crossfadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        #homepage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        #homepage.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to bottom, #4a4a4a 0%, #1a1a1a 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0) 100%);
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(26,26,26,0.3) 20%, rgba(26,26,26,0.3) 80%, transparent 100%);
+        }
+
+        .home-content {
+            text-align: center;
+            z-index: 1;
+            animation: fadeInUp 1.2s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: normal;
+            color: #e8dcc8;
+            letter-spacing: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pinyin {
+            font-size: 1.2rem;
+            color: #8a8a8a;
+            letter-spacing: 0.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #a0a0a0;
+            letter-spacing: 0.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-read {
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-family: 'SimSun', serif;
+            background-color: transparent;
+            border: 2px solid #c9b896;
+            color: #c9b896;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.2rem;
+        }
+
+        .btn-read:hover {
+            background-color: rgba(201, 184, 150, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(201, 184, 150, 0.3);
+        }
+
+        #newspaper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1a1a;
+            display: none;
+            z-index: 50;
+        }
+
+        #newspaper.visible {
+            display: block;
+        }
+
+        .newspaper-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 1s ease;
+        }
+
+        .bg-image.active {
+            opacity: 1;
+        }
+
+        .bg-image.inactive {
+            opacity: 0;
+        }
+
+        .btn-turn-page {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-family: 'SimSun', serif;
+            background-color: rgba(26, 26, 26, 0.8);
+            border: 1px solid #c9b896;
+            color: #c9b896;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.15rem;
+            z-index: 20;
+        }
+
+        .btn-turn-page:hover {
+            background-color: rgba(201, 184, 150, 0.2);
+            transform: scale(1.05);
+        }
+
+        .hotspots-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(201, 184, 150, 0);
+        }
+
+        .hotspot:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(201, 184, 150, 0.4);
+            border-color: rgba(201, 184, 150, 0.5);
+        }
+
+        .hotspot-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: #c9b896;
+            white-space: nowrap;
+            background-color: rgba(26, 26, 26, 0.8);
+            padding: 0.2rem 0.8rem;
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .hotspot:hover .hotspot-label {
+            opacity: 1;
+        }
+
+        #cloud-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 30%, transparent 70%);
+            pointer-events: none;
+            z-index: 200;
+            opacity: 0;
+            display: none;
+        }
+
+        #cloud-overlay.active {
+            display: block;
+            animation: cloudEffect 1.5s ease forwards;
+        }
+
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: particleFloat 1.5s ease forwards;
+        }
+
+        #content-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 150;
+            backdrop-filter: blur(5px);
+        }
+
+        #content-modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 80%;
+            max-width: 1000px;
+            max-height: 70vh;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 1px solid #c9b896;
+            box-shadow: 0 0 50px rgba(201, 184, 150, 0.2);
+            position: relative;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #c9b896;
+            background: linear-gradient(to right, rgba(201, 184, 150, 0.1) 0%, transparent 100%);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #e8dcc8;
+            letter-spacing: 0.2rem;
+        }
+
+        .modal-subtitle {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+            margin-top: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 40vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #c9b896 #2a2a2a;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #2a2a2a;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #c9b896;
+        }
+
+        .modal-text {
+            font-size: 1rem;
+            line-height: 2;
+            color: #d0d0d0;
+            text-align: justify;
+            letter-spacing: 0.05rem;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+            background: transparent;
+            border: 1px solid #c9b896;
+            color: #c9b896;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-close-modal:hover {
+            background-color: rgba(201, 184, 150, 0.2);
+            color: #fff;
+        }
+
+        #avg-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1a1a;
+            display: none;
+            z-index: 180;
+        }
+
+        #avg-screen.visible {
+            display: block;
+        }
+
+        .avg-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 50%, #0d0d0d 100%);
+        }
+
+        .avg-dialogue-box {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 900px;
+            background: linear-gradient(180deg, #f5e6c8 0%, #e8d4b0 50%, #d4c4a0 100%);
+            border: 3px solid #8b7355;
+            border-radius: 3px;
+            padding: 1.5rem;
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.1),
+                0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avg-dialogue-box:hover {
+            transform: translateX(-50%) scale(1.01);
+        }
+
+        .avg-dialogue-text {
+            font-size: 1.1rem;
+            color: #2d2d2d;
+            line-height: 1.8;
+            font-family: 'SimSun', 'STSong', serif;
+            letter-spacing: 0.08rem;
+        }
+
+        .avg-options {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .avg-option-btn {
+            padding: 0.8rem 2rem;
+            font-size: 0.95rem;
+            font-family: 'SimSun', serif;
+            background: linear-gradient(180deg, #f5e6c8 0%, #e8d4b0 100%);
+            border: 2px solid #8b7355;
+            color: #2d2d2d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .avg-option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-exit-avg {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.4rem;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #c9b896;
+            color: #c9b896;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .btn-exit-avg:hover {
+            background-color: rgba(201, 184, 150, 0.2);
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .pinyin {
+                font-size: 0.9rem;
+            }
+            
+            .btn-turn-page {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+            
+            .avg-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .avg-option-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="homepage">
+        <div class="hero-image"></div>
+        <div class="home-content">
+            <h1 class="main-title">思传达学</h1>
+            <p class="pinyin">ssu ch'uan ta hsüeh</p>
+            <p class="subtitle">这里是副标题占位符</p>
+            <button class="btn-read" id="btn-read">读报</button>
+        </div>
+    </div>
+
+    <div id="newspaper">
+        <div class="newspaper-container">
+            <img id="bg1" class="bg-image active" 
+                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=vintage%20chinese%20newspaper%20page%201919%20style%20sepia%20tone&image_size=landscape_16_9" 
+                 alt="报纸背景1">
+            <img id="bg2" class="bg-image inactive" 
+                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=vintage%20chinese%20newspaper%20page%20second%20page%20sepia%20tone&image_size=landscape_16_9" 
+                 alt="报纸背景2">
+            
+            <div class="hotspots-container" id="hotspots-container">
+                <div class="hotspot" id="hotspot-ref" data-target="modal">
+                    <div class="hotspot-label">参考文献</div>
+                </div>
+                <div class="hotspot" id="hotspot-project" data-target="modal">
+                    <div class="hotspot-label">项目介绍</div>
+                </div>
+                <div class="hotspot" id="hotspot-editorial" data-target="modal">
+                    <div class="hotspot-label">社论</div>
+                </div>
+                <div class="hotspot" id="hotspot-youth" data-target="avg">
+                    <div class="hotspot-label">青年专栏</div>
+                </div>
+            </div>
+            
+            <button class="btn-turn-page" id="btn-turn-page">翻页</button>
+        </div>
+    </div>
+
+    <div id="cloud-overlay">
+        <div class="particles-container" id="particles-container"></div>
+    </div>
+
+    <div id="content-modal">
+        <div class="modal-content">
+            <button class="btn-close-modal" id="btn-close-modal">X</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">标题占位</h2>
+                <p class="modal-subtitle" id="modal-subtitle">副标题占位</p>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text" id="modal-text">
+                    这是一段占位文本，用于展示文章内容。在实际使用中，这里将被替换为真实的文章内容。
+                    该文本区域支持滚动，可以容纳较长的文章内容。用户可以通过右侧的滚动条上下浏览。
+                    
+                    思传达学，作为一份具有深厚历史底蕴的刊物，承载着传播思想、启迪民智的使命。
+                    自创办以来，始终秉持客观公正的立场，记录时代变迁，传递社会心声。
+                    
+                    在这里，您将读到来自各方的声音，了解不同视角的观点，感受思想碰撞的火花。
+                    每一篇文章都经过精心挑选，每一个观点都值得深入思考。
+                    
+                    我们相信，文字的力量是无穷的。它可以跨越时空，连接人心，照亮前行的道路。
+                    愿这份刊物能够成为您思想旅程中的良师益友，陪伴您共同成长。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="avg-screen">
+        <div class="avg-background"></div>
+        <button class="btn-exit-avg" id="btn-exit-avg">X</button>
+        
+        <div class="avg-dialogue-box" id="avg-dialogue-box">
+            <p class="avg-dialogue-text" id="avg-dialogue-text">这里是一段可继续点击的对话占位符。</p>
+        </div>
+        
+        <div class="avg-options">
+            <button class="avg-option-btn">选项 A</button>
+            <button class="avg-option-btn">选项 B</button>
+            <button class="avg-option-btn">选项 C</button>
+        </div>
+    </div>
+
+    <script>
+        const homepage = document.getElementById('homepage');
+        const newspaper = document.getElementById('newspaper');
+        const btnRead = document.getElementById('btn-read');
+        const btnTurnPage = document.getElementById('btn-turn-page');
+        const bg1 = document.getElementById('bg1');
+        const bg2 = document.getElementById('bg2');
+        const cloudOverlay = document.getElementById('cloud-overlay');
+        const particlesContainer = document.getElementById('particles-container');
+        const contentModal = document.getElementById('content-modal');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+        const avgScreen = document.getElementById('avg-screen');
+        const btnExitAvg = document.getElementById('btn-exit-avg');
+        const avgDialogueBox = document.getElementById('avg-dialogue-box');
+        const avgDialogueText = document.getElementById('avg-dialogue-text');
+
+        let currentPage = 1;
+        let dialogueIndex = 0;
+        
+        const dialogueTexts = [
+            "这里是一段可继续点击的对话占位符。",
+            "这是第二段对话内容，故事正在展开中...",
+            "这是第三段也是最后一段对话内容。"
+        ];
+
+        const hotspotConfigs = {
+            page1: [
+                { id: 'hotspot-ref', name: '参考文献', left: '5%', top: '10%', width: '40%', height: '85%' },
+                { id: 'hotspot-project', name: '项目介绍', left: '55%', top: '10%', width: '40%', height: '85%' }
+            ],
+            page2: [
+                { id: 'hotspot-editorial', name: '社论', left: '5%', top: '10%', width: '40%', height: '85%' },
+                { id: 'hotspot-youth', name: '青年专栏', left: '55%', top: '10%', width: '40%', height: '85%' }
+            ]
+        };
+
+        function updateHotspots(page) {
+            const configs = hotspotConfigs[`page${page}`];
+            const hotspots = document.querySelectorAll('.hotspot');
+            
+            hotspots.forEach(hotspot => {
+                hotspot.style.display = 'none';
+            });
+            
+            configs.forEach(config => {
+                const hotspot = document.getElementById(config.id);
+                if (hotspot) {
+                    hotspot.style.display = 'block';
+                    hotspot.style.left = config.left;
+                    hotspot.style.top = config.top;
+                    hotspot.style.width = config.width;
+                    hotspot.style.height = config.height;
+                }
+            });
+        }
+
+        function createCloudEffect() {
+            cloudOverlay.classList.add('active');
+            
+            particlesContainer.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 0.5}s`;
+                particle.style.width = `${Math.random() * 15 + 5}px`;
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+            }
+            
+            setTimeout(() => {
+                cloudOverlay.classList.remove('active');
+            }, 1500);
+        }
+
+        btnRead.addEventListener('click', () => {
+            homepage.classList.add('hidden');
+            setTimeout(() => {
+                newspaper.classList.add('visible');
+                updateHotspots(1);
+            }, 800);
+        });
+
+        btnTurnPage.addEventListener('click', () => {
+            if (currentPage === 1) {
+                bg1.classList.remove('active');
+                bg1.classList.add('inactive');
+                bg2.classList.remove('inactive');
+                bg2.classList.add('active');
+                currentPage = 2;
+            } else {
+                bg2.classList.remove('active');
+                bg2.classList.add('inactive');
+                bg1.classList.remove('inactive');
+                bg1.classList.add('active');
+                currentPage = 1;
+            }
+            updateHotspots(currentPage);
+        });
+
+        document.querySelectorAll('.hotspot').forEach(hotspot => {
+            hotspot.addEventListener('click', () => {
+                const target = hotspot.dataset.target;
+                createCloudEffect();
+                
+                setTimeout(() => {
+                    if (target === 'modal') {
+                        contentModal.classList.add('visible');
+                    } else if (target === 'avg') {
+                        newspaper.classList.remove('visible');
+                        avgScreen.classList.add('visible');
+                        dialogueIndex = 0;
+                        avgDialogueText.textContent = dialogueTexts[0];
+                    }
+                }, 1500);
+            });
+        });
+
+        btnCloseModal.addEventListener('click', () => {
+            contentModal.classList.remove('visible');
+        });
+
+        btnExitAvg.addEventListener('click', () => {
+            avgScreen.classList.remove('visible');
+            newspaper.classList.add('visible');
+        });
+
+        avgDialogueBox.addEventListener('click', () => {
+            if (dialogueIndex < dialogueTexts.length - 1) {
+                dialogueIndex++;
+                avgDialogueText.textContent = dialogueTexts[dialogueIndex];
+            }
+        });
+
+        updateHotspots(1);
+    </script>
+</body>
+</html>
